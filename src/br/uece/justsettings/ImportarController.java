@@ -3,16 +3,14 @@ package br.uece.justsettings;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ResourceBundle;
-
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
 import com.sun.prism.impl.Disposer.Record;
-
 import br.uece.justsettings.util.ButtonCell;
-import javafx.application.Application;
+import br.uece.justsettings.util.Sessao;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -21,29 +19,29 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 
-public class ImportarController extends Application implements Initializable {
+public class ImportarController extends GeralController {
 
-	@FXML
-	private MenuItem sairMenuItem;
-
-	@FXML
-	private MenuItem sobreMenuItem;
+	private static Stage stage;
 
 	@FXML
 	private Button importarBtn;
+
+	@FXML
+	private Button continuarBtn;
+
+	@FXML
+	private Button voltarBtn;
 
 	@FXML
 	private TableView<File> classesTable = new TableView<File>();
@@ -53,15 +51,15 @@ public class ImportarController extends Application implements Initializable {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-
-			Parent parent = FXMLLoader.load(getClass().getResource("importa_classes.fxml"));
+			stage = primaryStage;
+			super.start(stage);
+			Parent parent = FXMLLoader.load(getClass().getResource("view/importa_classes.fxml"));
 			Scene scene = new Scene(parent);
-			primaryStage.setScene(scene);
-			primaryStage.setTitle("JustSettings - Importar Classes de Negócio");
-			primaryStage.show();
-
-		} catch(Exception e) {
-			e.printStackTrace();
+			stage.setScene(scene);
+			stage.setTitle("JustSettings - Importar Classes de Negócio");
+			stage.show();
+		} catch (Exception e1) {
+			e1.printStackTrace();
 		}
 	}
 
@@ -71,20 +69,13 @@ public class ImportarController extends Application implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
-		sobreMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				irParaSobre();
-			}
-		});
-
-		sairMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				sair();
-			}
-		});
+		super.initialize(arg0, arg1);
+		
+		Sessao sessao = Sessao.getInstance();
+		if (sessao.obterDadosSessao().containsKey("ARQUIVOS_CLASSES_NEGOCIO")) {
+			arquivosClassesDeNegocio = getArquivosSessao();
+		}
+		preencherTabelaClassesDeNegocio(arquivosClassesDeNegocio);
 
 		importarBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -93,11 +84,47 @@ public class ImportarController extends Application implements Initializable {
 			}
 		});
 
+		continuarBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				salvarEntradasNaSessao();
+				irParaConfigurarClasses();
+			}
+		});
+
+		voltarBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				salvarEntradasNaSessao();
+				voltarParaDefinicaoSaida();
+			}
+		});
+
 
 
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings("unchecked")
+	private ArrayList<File> getArquivosSessao() {
+		return (ArrayList<File>) Sessao.getInstance().obterDadosSessao().get("ARQUIVOS_CLASSES_NEGOCIO");
+	}
+
+	protected void salvarEntradasNaSessao() {
+		Sessao sessao = Sessao.getInstance();
+		HashMap<String, Object> dadosArquivosClassesNegocio = new HashMap<>();
+		dadosArquivosClassesNegocio.put("ARQUIVOS_CLASSES_NEGOCIO", arquivosClassesDeNegocio);
+		sessao.adicionarDadosSessao(dadosArquivosClassesNegocio);
+	}
+
+	public void voltarParaDefinicaoSaida() {
+		try {
+			new DefinirSaidaController().start(new Stage());
+			ImportarController.getStage().close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void adicionarClassesDeNegocio() {
 
 		JFileChooser fc = new JFileChooser();
@@ -115,10 +142,15 @@ public class ImportarController extends Application implements Initializable {
 				}
 			}
 		}
+		preencherTabelaClassesDeNegocio(arquivosClassesDeNegocio);
+		
+	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void preencherTabelaClassesDeNegocio(ArrayList<File> arquivosClassesDeNegocio) {
 		ObservableList<File> data = FXCollections.observableArrayList(arquivosClassesDeNegocio);
 		TableColumn<File, String> nomeClasseColumn = new TableColumn<File, String>("Classes de Negócio");
-		nomeClasseColumn.setMinWidth(510);
+		nomeClasseColumn.setMinWidth(450);
 		nomeClasseColumn.setCellValueFactory(new PropertyValueFactory<File, String>("name"));
 
 		classesTable.getColumns().clear();
@@ -145,16 +177,21 @@ public class ImportarController extends Application implements Initializable {
 						return new ButtonCell(data, arquivosClassesDeNegocio);
 					}
 				});
-		
+
 		classesTable.setItems(data);
 		
 	}
 
-	private void irParaSobre() {
+	public void irParaConfigurarClasses() {
 		// TODO Auto-generated method stub
+
 	}
 
-	private void sair() {
-		System.exit(0);
+	public static Stage getStage() {
+		return stage;
 	}
+
+
+
+
 }

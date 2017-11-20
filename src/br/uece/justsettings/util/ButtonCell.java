@@ -17,7 +17,7 @@ public class ButtonCell extends TableCell<Record, Boolean> {
 	final Button cellButton = new Button("Remover");
 
 	public ButtonCell(ObservableList<File> data, ArrayList<File> arquivosClassesDeNegocio){
-
+		
 		// Ação tomada quando o botão é pressionado
 		cellButton.setOnAction(new EventHandler<ActionEvent>(){
 
@@ -28,7 +28,6 @@ public class ButtonCell extends TableCell<Record, Boolean> {
 				//remove selected item from the table list
 				data.remove(classeAtual);
 
-				System.out.println("excluindo: " + classeAtual.getName());
 				arquivosClassesDeNegocio.remove(classeAtual);
 				data.clear();
 				data.setAll(FXCollections.observableArrayList(arquivosClassesDeNegocio));

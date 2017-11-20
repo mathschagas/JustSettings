@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.uece.justsettings.DefinirSaidaController">
+	<children>
+		<MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="348.0" VBox.vgrow="NEVER">
+			<menus>
+				<Menu mnemonicParsing="false" text="Opções">
+					<items>
+						<MenuItem fx:id="sairMenuItem" mnemonicParsing="false" text="Sair" />
+					</items>
+				</Menu>
+				<Menu mnemonicParsing="false" text="Sobre">
+					<items>
+						<MenuItem fx:id="sobreMenuItem" mnemonicParsing="false" text="Sobre o JustSettings" />
+					</items>
+				</Menu>
+			</menus>
+		</MenuBar>
+		<AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+			<children>
+            <Text layoutX="98.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selecione o tipo de configuração desejada para cada funcionalidade do JustBusiness" AnchorPane.topAnchor="30.0" />
+            <GridPane layoutX="71.0" layoutY="143.0" prefHeight="90.0" prefWidth="500.0">
+              <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="Interface" />
+                  <Label text="Persistência Externa" GridPane.rowIndex="1" />
+                  <Label text="Web Service" GridPane.rowIndex="2" />
+                  <RadioButton fx:id="interfaceAnnotationRadioBtn" mnemonicParsing="false" text="\@Annotation" GridPane.columnIndex="1" />
+                  <RadioButton fx:id="persistenciaAnnotationRadioBtn" mnemonicParsing="false" text="\@Annotation" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <RadioButton fx:id="webSeviceAnnotationRadioBtn" mnemonicParsing="false" text="\@Annotation" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <RadioButton fx:id="interfaceXMLRadioBtn" mnemonicParsing="false" text="&lt;XML&gt;" GridPane.columnIndex="2" />
+                  <RadioButton fx:id="persistenciaXMLRadioBtn" mnemonicParsing="false" text="&lt;XML&gt;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <RadioButton fx:id="webServiceXMLRadioBtn" mnemonicParsing="false" text="&lt;XML&gt;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <RadioButton fx:id="interfaceNenhumRadioBtn" mnemonicParsing="false" text="Nenhum" GridPane.columnIndex="3" />
+                  <RadioButton fx:id="persistenciaNenhumRadioBtn" mnemonicParsing="false" text="Nenhum" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <RadioButton fx:id="webServiceNenhumRadioBtn" mnemonicParsing="false" text="Nenhum" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+               </children>
+            </GridPane>
+            <GridPane layoutX="209.0" layoutY="279.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="496.0" minWidth="10.0" prefWidth="496.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="282.0" minWidth="10.0" prefWidth="84.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+      				<Button fx:id="continuarBtn" mnemonicParsing="false" text="Continuar &gt;" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
+                  <Text fx:id="avisoNenhumSelecionadoText" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+               </children>
+            </GridPane>
+			</children>
+		</AnchorPane>
+	</children>
+</VBox>
