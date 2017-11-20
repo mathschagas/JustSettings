@@ -1,6 +1,11 @@
 package br.uece.justsettings;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -127,7 +132,7 @@ public class ImportarController extends GeralController {
 
 	private void adicionarClassesDeNegocio() {
 
-		JFileChooser fc = new JFileChooser();
+		JFileChooser fc = new JFileChooser("C:\\Users\\math_\\Documents\\workspace\\JustBusiness\\AndroidStudio\\JBEmptyProject\\app\\src\\main\\java\\org\\jb\\model");
 		fc.setMultiSelectionEnabled(true);
 		fc.setAcceptAllFileFilterUsed(false);
 		FileFilter filter = new FileNameExtensionFilter("Arquivos JAVA", "java");
@@ -183,7 +188,16 @@ public class ImportarController extends GeralController {
 	}
 
 	public void irParaConfigurarClasses() {
-		// TODO Auto-generated method stub
+		System.out.println(arquivosClassesDeNegocio.get(0).toPath());
+		try {
+			for (int i = 0; i < arquivosClassesDeNegocio.size(); i++) {
+				// TODO: copia de todos os arquivos pra fazer o reflection
+			}
+			new ConfigurarClassesController().start(new Stage());
+			ImportarController.getStage().close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -191,6 +205,22 @@ public class ImportarController extends GeralController {
 		return stage;
 	}
 
+	private static void copyFileUsingStream(File source, File dest) throws IOException {
+	    InputStream is = null;
+	    OutputStream os = null;
+	    try {
+	        is = new FileInputStream(source);
+	        os = new FileOutputStream(dest);
+	        byte[] buffer = new byte[1024];
+	        int length;
+	        while ((length = is.read(buffer)) > 0) {
+	            os.write(buffer, 0, length);
+	        }
+	    } finally {
+	        is.close();
+	        os.close();
+	    }
+	}
 
 
 
