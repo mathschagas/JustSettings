@@ -31,23 +31,23 @@ public class DefinirSaidaController extends GeralController {
 	@FXML
 	private RadioButton persistenciaAnnotationRadioBtn;
 	@FXML
-	private RadioButton webSeviceAnnotationRadioBtn;
+	private RadioButton streamAnnotationRadioBtn;
 	@FXML
 	private RadioButton interfaceXMLRadioBtn;
 	@FXML
 	private RadioButton persistenciaXMLRadioBtn;
 	@FXML
-	private RadioButton webServiceXMLRadioBtn;
+	private RadioButton streamXMLRadioBtn;
 	@FXML
 	private RadioButton interfaceNenhumRadioBtn;
 	@FXML
 	private RadioButton persistenciaNenhumRadioBtn;
 	@FXML
-	private RadioButton webServiceNenhumRadioBtn;
+	private RadioButton streamNenhumRadioBtn;
 	
 	private ToggleGroup grupoInterface = new ToggleGroup();
 	private ToggleGroup grupoPersistencia = new ToggleGroup();
-	private ToggleGroup grupoWebService = new ToggleGroup();
+	private ToggleGroup grupoStream = new ToggleGroup();
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -88,6 +88,7 @@ public class DefinirSaidaController extends GeralController {
 	}
 	
 	private void irParaTelaDeImportarClasses() {
+		
 		new ImportarController().start(new Stage());
 		DefinirSaidaController.getStage().close();
 		
@@ -97,7 +98,7 @@ public class DefinirSaidaController extends GeralController {
 		
 		RadioButton selecionadoInterface = (RadioButton) grupoInterface.getSelectedToggle();
 		RadioButton selecionadoPersistencia = (RadioButton) grupoPersistencia.getSelectedToggle();
-		RadioButton selecionadoWebService = (RadioButton) grupoWebService.getSelectedToggle();
+		RadioButton selecionadoStream = (RadioButton) grupoStream.getSelectedToggle();
 		
 		Sessao sessao = Sessao.getInstance();
 		
@@ -118,12 +119,12 @@ public class DefinirSaidaController extends GeralController {
 			dadosEntrada.put("PERSISTENCIA", "NENHUM");
 		}
 		
-		if (selecionadoWebService.equals(webSeviceAnnotationRadioBtn)) {
-			dadosEntrada.put("WEBSERVICE", "ANNOTATION");
-		} else if (selecionadoWebService.equals(webServiceXMLRadioBtn)){
-			dadosEntrada.put("WEBSERVICE", "XML");
+		if (selecionadoStream.equals(streamAnnotationRadioBtn)) {
+			dadosEntrada.put("STREAM", "ANNOTATION");
+		} else if (selecionadoStream.equals(streamXMLRadioBtn)){
+			dadosEntrada.put("STREAM", "XML");
 		} else {
-			dadosEntrada.put("WEBSERVICE", "NENHUM");
+			dadosEntrada.put("STREAM", "NENHUM");
 		}				
 		
 		sessao.adicionarDadosSessao(dadosEntrada);
@@ -137,7 +138,7 @@ public class DefinirSaidaController extends GeralController {
 				// Se todos estiverem "Nenhum" como opção marcada, não será possível continuar com a execução.
 				if (grupoInterface.getSelectedToggle().equals(interfaceNenhumRadioBtn) &&
 						grupoPersistencia.getSelectedToggle().equals(persistenciaNenhumRadioBtn) &&
-						grupoWebService.getSelectedToggle().equals(webServiceNenhumRadioBtn)) {
+						grupoStream.getSelectedToggle().equals(streamNenhumRadioBtn)) {
 					continuarBtn.setDisable(true);
 					avisoNenhumSelecionadoText.setText("Aviso: Você deve selecionar pelo menos uma opção em Annotation ou XML.");
 				} else { // caso contrario, ou seja, pelo menos um item marcado como Annotation ou XML, o botão de continuar é ativado
@@ -154,9 +155,9 @@ public class DefinirSaidaController extends GeralController {
 		persistenciaAnnotationRadioBtn.setOnAction(mudancaRadio);
 		persistenciaXMLRadioBtn.setOnAction(mudancaRadio);
 		persistenciaNenhumRadioBtn.setOnAction(mudancaRadio);
-		webSeviceAnnotationRadioBtn.setOnAction(mudancaRadio);
-		webServiceXMLRadioBtn.setOnAction(mudancaRadio);
-		webServiceNenhumRadioBtn.setOnAction(mudancaRadio);
+		streamAnnotationRadioBtn.setOnAction(mudancaRadio);
+		streamXMLRadioBtn.setOnAction(mudancaRadio);
+		streamNenhumRadioBtn.setOnAction(mudancaRadio);
 		
 	}
 
@@ -170,9 +171,9 @@ public class DefinirSaidaController extends GeralController {
 		persistenciaXMLRadioBtn.setToggleGroup(grupoPersistencia);
 		persistenciaNenhumRadioBtn.setToggleGroup(grupoPersistencia);
 		
-		webSeviceAnnotationRadioBtn.setToggleGroup(grupoWebService);
-		webServiceXMLRadioBtn.setToggleGroup(grupoWebService);
-		webServiceNenhumRadioBtn.setToggleGroup(grupoWebService);
+		streamAnnotationRadioBtn.setToggleGroup(grupoStream);
+		streamXMLRadioBtn.setToggleGroup(grupoStream);
+		streamNenhumRadioBtn.setToggleGroup(grupoStream);
 		
 	}
 	
@@ -181,13 +182,13 @@ public class DefinirSaidaController extends GeralController {
 		HashMap<String, Object> dadosSessao = Sessao.getInstance().obterDadosSessao();
 		
 		// Se houver dados de definição de saída presentes na sessão
-		if (dadosSessao.containsKey("INTERFACE") && dadosSessao.containsKey("PERSISTENCIA") &&dadosSessao.containsKey("WEBSERVICE")) {
+		if (dadosSessao.containsKey("INTERFACE") && dadosSessao.containsKey("PERSISTENCIA") &&dadosSessao.containsKey("STREAM")) {
 			restaurarDadosSessao();
 		} else {
 			// Configuração Inicial padrão
 			interfaceNenhumRadioBtn.setSelected(true);
 			persistenciaNenhumRadioBtn.setSelected(true);
-			webServiceNenhumRadioBtn.setSelected(true);
+			streamNenhumRadioBtn.setSelected(true);
 			continuarBtn.setDisable(true);
 		}
 		
@@ -199,7 +200,7 @@ public class DefinirSaidaController extends GeralController {
 		
 		if (dadosSessao.get("INTERFACE").equals("ANNOTATION")) {
 			interfaceAnnotationRadioBtn.setSelected(true);
-		} if (dadosSessao.get("INTERFACE").equals("XML")) {
+		} else if (dadosSessao.get("INTERFACE").equals("XML")) {
 			interfaceXMLRadioBtn.setSelected(true);
 		} else {
 			interfaceNenhumRadioBtn.setSelected(true);
@@ -207,18 +208,18 @@ public class DefinirSaidaController extends GeralController {
 		
 		if (dadosSessao.get("PERSISTENCIA").equals("ANNOTATION")) {
 			persistenciaAnnotationRadioBtn.setSelected(true);
-		} if (dadosSessao.get("PERSISTENCIA").equals("XML")) {
+		} else if (dadosSessao.get("PERSISTENCIA").equals("XML")) {
 			persistenciaXMLRadioBtn.setSelected(true);
 		} else {
 			persistenciaNenhumRadioBtn.setSelected(true);
 		}
 		
-		if (dadosSessao.get("WEBSERVICE").equals("ANNOTATION")) {
-			webSeviceAnnotationRadioBtn.setSelected(true);
-		} if (dadosSessao.get("PERSISTENCIA").equals("XML")) {
-			webServiceXMLRadioBtn.setSelected(true);
+		if (dadosSessao.get("STREAM").equals("ANNOTATION")) {
+			streamAnnotationRadioBtn.setSelected(true);
+		} else if (dadosSessao.get("STREAM").equals("XML")) {
+			streamXMLRadioBtn.setSelected(true);
 		} else {
-			webServiceNenhumRadioBtn.setSelected(true);
+			streamNenhumRadioBtn.setSelected(true);
 		}
 
 	}

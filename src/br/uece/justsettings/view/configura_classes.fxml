@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="480.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.uece.justsettings.ConfigurarClassesController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.uece.justsettings.ConfigurarClassesController">
 	<children>
 		<MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="348.0" VBox.vgrow="NEVER">
 			<menus>
@@ -50,35 +50,42 @@
                             <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                           </columnConstraints>
                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label text="Classe">
+                              <Label text="Classe de Negócio" GridPane.rowIndex="1">
                                  <GridPane.margin>
                                     <Insets right="20.0" />
                                  </GridPane.margin>
                               </Label>
-                              <ComboBox fx:id="arquivosComboBox" prefWidth="150.0" GridPane.columnIndex="1" />
-                              <Label text="Atributo / Método" GridPane.rowIndex="1">
+                              <ComboBox fx:id="arquivosComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label text="Alvo" GridPane.rowIndex="2">
                                  <GridPane.margin>
                                     <Insets right="20.0" />
                                  </GridPane.margin>
                               </Label>
-                              <ComboBox fx:id="atributosMetodosComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label text="Opções" GridPane.rowIndex="2">
+                              <ComboBox fx:id="atributosMetodosComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label text="Opções" GridPane.rowIndex="3">
                                  <GridPane.margin>
                                     <Insets right="20.0" />
                                  </GridPane.margin>
                               </Label>
-                              <ComboBox fx:id="opcoesConfiguracaoComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <ComboBox fx:id="opcoesConfiguracaoComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label text="Tipo de Configuração">
+                                 <GridPane.margin>
+                                    <Insets right="20.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <ComboBox fx:id="tipoConfiguracaoComboBox" prefWidth="150.0" GridPane.columnIndex="1" />
                            </children>
                            <VBox.margin>
                               <Insets top="20.0" />
                            </VBox.margin>
                         </GridPane>
-                        <TableView prefHeight="236.0" prefWidth="360.0">
+                        <TableView fx:id="EntradasConfigTable" prefHeight="361.0" prefWidth="400.0">
                            <VBox.margin>
                               <Insets top="20.0" />
                            </VBox.margin>
@@ -86,13 +93,14 @@
                         <Pane prefHeight="67.0" prefWidth="360.0">
                            <children>
                               <Button alignment="CENTER_RIGHT" layoutX="279.0" layoutY="14.0" mnemonicParsing="false" text="Adicionar" />
+                              <Button fx:id="voltarBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="&lt; Voltar" />
                            </children>
                         </Pane>
                      </children>
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
                      <children>
-                        <TableView prefHeight="403.0" prefWidth="360.0" />
+                        <TableView fx:id="ProgressoConfigTable" prefHeight="525.0" prefWidth="400.0" />
                         <Pane prefHeight="49.0" prefWidth="360.0">
                            <children>
                               <Button alignment="CENTER_RIGHT" layoutX="90.0" layoutY="12.0" mnemonicParsing="false" text="Encerrar e Gerar Configurações" />

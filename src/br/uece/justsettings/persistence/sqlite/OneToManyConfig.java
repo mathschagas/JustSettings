@@ -1,0 +1,9 @@
+package br.uece.justsettings.persistence.sqlite;
+
+import br.uece.justsettings.settings.JBConfig;
+
+public class OneToManyConfig extends JBConfig {
+	public OneToManyConfig() {
+		// TODO Auto-generated constructor stub
+	}
+}

@@ -47,16 +47,16 @@
                <children>
                   <Label text="Interface" />
                   <Label text="Persistência Externa" GridPane.rowIndex="1" />
-                  <Label text="Web Service" GridPane.rowIndex="2" />
+                  <Label text="Stream" GridPane.rowIndex="2" />
                   <RadioButton fx:id="interfaceAnnotationRadioBtn" mnemonicParsing="false" text="\@Annotation" GridPane.columnIndex="1" />
                   <RadioButton fx:id="persistenciaAnnotationRadioBtn" mnemonicParsing="false" text="\@Annotation" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <RadioButton fx:id="webSeviceAnnotationRadioBtn" mnemonicParsing="false" text="\@Annotation" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <RadioButton fx:id="streamAnnotationRadioBtn" mnemonicParsing="false" text="\@Annotation" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <RadioButton fx:id="interfaceXMLRadioBtn" mnemonicParsing="false" text="&lt;XML&gt;" GridPane.columnIndex="2" />
                   <RadioButton fx:id="persistenciaXMLRadioBtn" mnemonicParsing="false" text="&lt;XML&gt;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <RadioButton fx:id="webServiceXMLRadioBtn" mnemonicParsing="false" text="&lt;XML&gt;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <RadioButton fx:id="streamXMLRadioBtn" mnemonicParsing="false" text="&lt;XML&gt;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                   <RadioButton fx:id="interfaceNenhumRadioBtn" mnemonicParsing="false" text="Nenhum" GridPane.columnIndex="3" />
                   <RadioButton fx:id="persistenciaNenhumRadioBtn" mnemonicParsing="false" text="Nenhum" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                  <RadioButton fx:id="webServiceNenhumRadioBtn" mnemonicParsing="false" text="Nenhum" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <RadioButton fx:id="streamNenhumRadioBtn" mnemonicParsing="false" text="Nenhum" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                </children>
             </GridPane>
             <GridPane layoutX="209.0" layoutY="279.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
