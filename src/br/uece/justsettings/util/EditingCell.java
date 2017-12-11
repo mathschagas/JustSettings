@@ -82,7 +82,6 @@ public class EditingCell extends TableCell<ParametroConfig, String> {
 		});
 		textField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
 			if (!newValue) {
-				System.out.println("Commiting " + textField.getText());
 				commitEdit(textField.getText());
 				EditingCell.this.getTableView().getItems().get(this.getIndex()).setValor(textField.getText());
 			}

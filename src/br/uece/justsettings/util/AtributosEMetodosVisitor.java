@@ -1,8 +1,6 @@
 package br.uece.justsettings.util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -13,6 +11,7 @@ public class AtributosEMetodosVisitor extends VoidVisitorAdapter<Void> {
 
 	Sessao sessao = Sessao.getInstance();
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void visit(FieldDeclaration fd, Void arg) {
 		super.visit(fd, arg);
@@ -27,6 +26,7 @@ public class AtributosEMetodosVisitor extends VoidVisitorAdapter<Void> {
 		sessao.obterDadosSessao().put("ATRIBUTOS_ARQUIVO_SELECIONADO", atributosArquivoSelecionado);
 	} 
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void visit(MethodDeclaration md, Void arg) {
 		super.visit(md, arg);
@@ -42,6 +42,7 @@ public class AtributosEMetodosVisitor extends VoidVisitorAdapter<Void> {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void visit(ClassOrInterfaceDeclaration cid, Void arg) {
 		super.visit(cid, arg);
@@ -56,6 +57,7 @@ public class AtributosEMetodosVisitor extends VoidVisitorAdapter<Void> {
 		sessao.obterDadosSessao().put("CLASSES_ARQUIVO_SELECIONADO", classesArquivoSelecionado);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void visit(EnumDeclaration ed, Void arg) {
 		super.visit(ed, arg);
