@@ -6,27 +6,35 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javax.swing.JFileChooser;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
+import com.sun.prism.impl.Disposer.Record;
+import br.uece.justsettings.settings.JBConfig;
 import br.uece.justsettings.settings.ParametroConfig;
 import br.uece.justsettings.util.AtributosEMetodosVisitor;
+import br.uece.justsettings.util.ConfigButtonCell;
+import br.uece.justsettings.util.ConfigFactory;
 import br.uece.justsettings.util.EditingCell;
-import br.uece.justsettings.util.ParametrosConfigFactory;
 import br.uece.justsettings.util.Sessao;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -35,6 +43,8 @@ public class ConfigurarClassesController extends GeralController {
 
 	private static Stage stage;
 	private ArrayList<File> arquivosClassesDeNegocio = new ArrayList<File>();
+	private ArrayList<JBConfig> configs = new ArrayList<JBConfig>();
+	
 	@FXML
 	private ComboBox<String> arquivosComboBox;
 	@FXML
@@ -44,11 +54,15 @@ public class ConfigurarClassesController extends GeralController {
 	@FXML
 	private ComboBox<String> tipoConfiguracaoComboBox;
 	@FXML
+	private TableView<ParametroConfig> entradasConfigTable;
+	@FXML
+	private TableView<JBConfig> progressoConfigTable;
+	@FXML
 	private Button voltarBtn;
 	@FXML
-	private TableView<ParametroConfig> EntradasConfigTable;
+	private Button adicionarBtn;
 	@FXML
-	private TableView<ParametroConfig> ProgressoConfigTable;
+	private Button gerarBtn;
 
 	
 	public static void main(String[] args) {
@@ -119,6 +133,21 @@ public class ConfigurarClassesController extends GeralController {
 				atualizarTabelaEntradas();
 			}
 		});
+		
+		adicionarBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				adicionarConfiguracao();
+			}
+		});
+		
+		gerarBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				gerarConfiguracoes();
+			}
+		});
+		
 		
 	}
 
@@ -281,10 +310,11 @@ public class ConfigurarClassesController extends GeralController {
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void atualizarTabelaEntradas() {
 		
-		EntradasConfigTable.setEditable(true);
-		EntradasConfigTable.getColumns().clear();
+		entradasConfigTable.setEditable(true);
+		entradasConfigTable.getColumns().clear();
 		
 		Callback<TableColumn<ParametroConfig, String>, TableCell<ParametroConfig, String>> cellFactory
 		= (TableColumn<ParametroConfig, String> param) -> new EditingCell();
@@ -301,15 +331,116 @@ public class ConfigurarClassesController extends GeralController {
 		valorParametroColumn.setCellFactory(cellFactory);
 
 		String opcaoEscolhida = opcoesConfiguracaoComboBox.getSelectionModel().getSelectedItem();
-		ParametrosConfigFactory fabricaParamConfig = ParametrosConfigFactory.getInstance();
+		ConfigFactory fabricaConfig = ConfigFactory.getInstance();
 		ArrayList<ParametroConfig> parametros = new ArrayList<>();
 		if (opcaoEscolhida != null) {
-			parametros = fabricaParamConfig.getParametrosConfig(opcaoEscolhida);
+			parametros = fabricaConfig.getParametrosConfig(opcaoEscolhida);
 		}
 
-		EntradasConfigTable.setItems(FXCollections.observableArrayList(parametros));
-		EntradasConfigTable.getColumns().addAll(nomeParametroColumn, tipoParametroColumn, valorParametroColumn);
+		entradasConfigTable.setItems(FXCollections.observableArrayList(parametros));
+		entradasConfigTable.getColumns().addAll(nomeParametroColumn, tipoParametroColumn, valorParametroColumn);
 
+	}
+
+	protected void adicionarConfiguracao() {
+		
+		Boolean validado = validarEntradas();
+		if (validado) {
+		
+			ConfigFactory fabricaConfig = ConfigFactory.getInstance();
+			String nomeConfigEscolhida = opcoesConfiguracaoComboBox.getSelectionModel().getSelectedItem();
+			JBConfig configEscolhida = fabricaConfig.getConfig(nomeConfigEscolhida);
+			configEscolhida.setNome(nomeConfigEscolhida);
+			configEscolhida.setNomeArquivoAlvo(arquivosComboBox.getSelectionModel().getSelectedItem());
+			configEscolhida.setAlvo(atributosMetodosComboBox.getSelectionModel().getSelectedItem());
+			configEscolhida.setTipoConfig(tipoConfiguracaoComboBox.getSelectionModel().getSelectedItem());
+			
+			ObservableList<ParametroConfig> entradasConfig = entradasConfigTable.getItems();
+			for (int i = 0; i < entradasConfig.size(); i++) {
+				configEscolhida.getParametros().get(i).setValor(entradasConfig.get(i).getValor());
+			}
+			
+			configs.add(configEscolhida);
+			atualizarTabelaProgresso();
+			atributosMetodosComboBox.getSelectionModel().select("");
+			opcoesConfiguracaoComboBox.getSelectionModel().select("");
+		} else {
+			
+		}
+	}
+
+	private Boolean validarEntradas() {
+		// TODO
+		return true;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void atualizarTabelaProgresso() {
+		
+		progressoConfigTable.setEditable(true);
+		progressoConfigTable.getColumns().clear();
+		
+		ObservableList<JBConfig> data = FXCollections.observableArrayList(configs);
+		TableColumn<JBConfig, String> nomeConfigColumn = new TableColumn<JBConfig, String>("Configuração");
+		nomeConfigColumn.setCellValueFactory(new PropertyValueFactory<JBConfig, String>("nome"));
+		TableColumn<JBConfig, String> nomeArquivoColumn = new TableColumn<JBConfig, String>("Arquivo");
+		nomeArquivoColumn.setCellValueFactory(new PropertyValueFactory<JBConfig, String>("nomeArquivoAlvo"));
+		TableColumn<JBConfig, String> tipoConfigColumn = new TableColumn<JBConfig, String>("Tipo");
+		tipoConfigColumn.setCellValueFactory(new PropertyValueFactory<JBConfig, String>("tipoConfig"));
+		TableColumn<JBConfig, String> alvoConfigColumn = new TableColumn<JBConfig, String>("Alvo");
+		alvoConfigColumn.setCellValueFactory(new PropertyValueFactory<JBConfig, String>("alvo"));
+		TableColumn<JBConfig, String> parametrosConfigColumn = new TableColumn<JBConfig, String>("Parametros");
+		parametrosConfigColumn.setCellValueFactory(new PropertyValueFactory<JBConfig, String>("parametros"));
+
+
+		progressoConfigTable.getColumns().addAll(nomeConfigColumn, nomeArquivoColumn, tipoConfigColumn, alvoConfigColumn, parametrosConfigColumn);
+
+		// Coluna de Ações
+		TableColumn acoesConfigColumn = new TableColumn<>("Ações");
+		progressoConfigTable.getColumns().add(acoesConfigColumn);
+		acoesConfigColumn.setCellValueFactory(
+				new Callback<TableColumn.CellDataFeatures<Record, Boolean>, 
+				ObservableValue<Boolean>>() {
+
+					@Override
+					public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Record, Boolean> p) {
+						return new SimpleBooleanProperty(p.getValue() != null);
+					}
+				});
+
+		// Adicionando o Botão de Remover na Celula da Coluna de Ações
+		acoesConfigColumn.setCellFactory(
+				new Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>() {
+					@Override
+					public TableCell<Record, Boolean> call(TableColumn<Record, Boolean> p) {
+						return new ConfigButtonCell(data, configs);
+					}
+				});
+
+		progressoConfigTable.setItems(data);
+		
+	}
+
+	protected void gerarConfiguracoes() {
+		// TODO Auto-generated method stub
+		
+		JFileChooser fc = new JFileChooser("C:\\Users\\math_\\Documents\\workspace\\JustBusiness\\AndroidStudio\\JBEmptyProject\\app\\src\\main\\java\\org\\jb\\model");
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc.setDialogTitle("Escolher Destino das Configurações");
+		fc.setApproveButtonText("Selecionar");
+		int opcao = fc.showOpenDialog(fc);
+		if (opcao == JFileChooser.APPROVE_OPTION) {
+			File destino = fc.getSelectedFile();
+			// TODO: gerar XML/Annotations
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Encerrando Aplicação");
+			alert.setContentText("Arquivos gerados com sucesso e armazenados em \""+destino.getAbsolutePath()+"\" . O programa será encerrado.");
+			alert.showAndWait();
+			System.exit(0);
+
+		}
+
+		
 	}
 
 

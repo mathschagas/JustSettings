@@ -76,11 +76,15 @@ public class EditingCell extends TableCell<ParametroConfig, String> {
 	private void createTextField() {
 		textField = new TextField(getString());
 		textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
-		textField.setOnAction((e) -> commitEdit(textField.getText()));
+		textField.setOnAction((e) -> {
+			commitEdit(textField.getText());
+			EditingCell.this.getTableView().getItems().get(this.getIndex()).setValor(textField.getText());
+		});
 		textField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
 			if (!newValue) {
 				System.out.println("Commiting " + textField.getText());
 				commitEdit(textField.getText());
+				EditingCell.this.getTableView().getItems().get(this.getIndex()).setValor(textField.getText());
 			}
 		});
 	}
@@ -119,6 +123,7 @@ public class EditingCell extends TableCell<ParametroConfig, String> {
 		comboBox.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
 		comboBox.setOnAction((e) -> {
 			commitEdit(comboBox.getSelectionModel().getSelectedItem());
+			EditingCell.this.getTableView().getItems().get(this.getIndex()).setValor(comboBox.getSelectionModel().getSelectedItem());
 		});
 	}
 

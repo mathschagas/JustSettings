@@ -1,9 +1,6 @@
 package br.uece.justsettings.persistence.web;
 
 import java.util.ArrayList;
-
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
 import br.uece.justsettings.settings.JBConfig;
 
 public class WebEntityConfig extends JBConfig {

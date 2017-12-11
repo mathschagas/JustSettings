@@ -6,6 +6,7 @@ import br.uece.justsettings.persistence.web.WebActionConfig;
 import br.uece.justsettings.persistence.web.WebAggregationConfig;
 import br.uece.justsettings.persistence.web.WebCompositionConfig;
 import br.uece.justsettings.persistence.web.WebEntityConfig;
+import br.uece.justsettings.settings.JBConfig;
 import br.uece.justsettings.settings.ParametroConfig;
 import br.uece.justsettings.settings.stream.StreamAttributeConfig;
 import br.uece.justsettings.settings.stream.StreamElementConfig;
@@ -21,20 +22,93 @@ import br.uece.justsettings.settings.ui.JBEnumerationConfig;
 import br.uece.justsettings.settings.ui.JBLargeConfig;
 import br.uece.justsettings.settings.ui.JBTemporalConfig;
 
-public class ParametrosConfigFactory {
+public class ConfigFactory {
 
-	private static ParametrosConfigFactory instance;
+	private static ConfigFactory instance;
 	
-	private ParametrosConfigFactory() {
+	private ConfigFactory() {
 	}
 	
 
-	public static ParametrosConfigFactory getInstance() {
+	public static ConfigFactory getInstance() {
         if (instance == null) {
-            instance = new ParametrosConfigFactory();
+            instance = new ConfigFactory();
         }
         return instance;
     }
+	
+	public JBConfig getConfig(String nomeConfig) {
+    	JBConfig retorno = null;
+    	
+    	switch (nomeConfig) {
+    	
+    	// INTERFACE
+    	case "JBEntity":
+    		retorno = new JBEntityConfig();
+    		break;
+    	case "JBEnumeration":
+    		retorno = new JBEnumerationConfig();
+    		break;
+    	case "JBAttribute":
+    		retorno = new JBAttributeConfig();
+    		break;
+    	case "JBLarge":
+    		retorno = new JBLargeConfig();
+    		break;
+    	case "JBTemporal":
+    		retorno = new JBTemporalConfig();
+    		break;
+    	case "JBDescription":
+    		retorno = new JBDescriptionConfig();
+    		break;
+    	case "JBAction":
+    		retorno = new JBActionConfig();
+    		break;
+    		
+    		
+    	// PERSISTENCIA
+    		
+    	case "WebEntity":
+    		retorno = new WebEntityConfig();
+    		break;
+    	case "WebAggregation":
+    		retorno = new WebAggregationConfig();
+    		break;
+    	case "WebComposition":
+    		retorno = new WebCompositionConfig();
+    		break;
+    	case "WebAction":
+    		retorno = new WebActionConfig();
+    		break;
+    	
+    		
+    		
+		// STREAM
+    	case "StreamEntity":
+    		retorno = new StreamEntityConfig();
+    		break;
+    	case "StreamAttribute":
+    		retorno = new StreamAttributeConfig();
+    		break;
+    	case "StreamElement":
+    		retorno = new StreamElementConfig();
+    		break;
+    	case "StreamEnumerated":
+    		retorno = new StreamEnumeratedConfig();
+    		break;
+    	case "StreamTemporal":
+    		retorno = new StreamTemporalConfig();
+    		break;
+    	case "StreamTransient":
+    		retorno = new StreamTransientConfig();
+    		break;
+    		
+
+    	}
+    	
+    	return retorno;
+		
+	}
     
     public ArrayList<ParametroConfig> getParametrosConfig(String nomeConfig) {
     	

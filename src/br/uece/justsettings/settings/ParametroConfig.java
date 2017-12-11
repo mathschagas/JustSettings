@@ -51,5 +51,10 @@ public class ParametroConfig {
 	public void setValor(Object valor) {
 		this.valor = valor;
 	}
+	
+	@Override
+	public String toString() {
+		return getNome() + ": " + getValor();		
+	}
 
 }
