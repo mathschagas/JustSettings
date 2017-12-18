@@ -1,10 +1,14 @@
 package br.uece.justsettings.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 public class AtributosEMetodosVisitor extends VoidVisitorAdapter<Void> {
@@ -39,6 +43,25 @@ public class AtributosEMetodosVisitor extends VoidVisitorAdapter<Void> {
 		String nomeMetodoAtual = md.getNameAsString();
 		metodosArquivoSelecionado.add(nomeMetodoAtual + " (METHOD)");
 		sessao.obterDadosSessao().put("METODOS_ARQUIVO_SELECIONADO", metodosArquivoSelecionado);
+		
+		
+		// Sessao de parametros
+		NodeList<Parameter> parametros = md.getParameters();
+		ArrayList<String> nomesParametros = new ArrayList<>();
+		for (int i = 0; i < parametros.size(); i++) {
+			nomesParametros.add(parametros.get(i).getNameAsString() + " ("+nomeMetodoAtual+")");
+		}
+		
+		HashMap<String, ArrayList<String>> parametrosMetodosArquivoSelecionado;
+		if (sessao.obterDadosSessao().containsKey("PARAMETROS_METODOS_ARQUIVO_SELECIONADO")) {
+			parametrosMetodosArquivoSelecionado = (HashMap<String, ArrayList<String>>) sessao.obterDadosSessao().get("PARAMETROS_METODOS_ARQUIVO_SELECIONADO");
+		} else {
+			parametrosMetodosArquivoSelecionado = new HashMap<String, ArrayList<String>>();
+		}
+		
+		parametrosMetodosArquivoSelecionado.put(nomeMetodoAtual + " (METHOD)", nomesParametros);
+		sessao.obterDadosSessao().put("PARAMETROS_METODOS_ARQUIVO_SELECIONADO", parametrosMetodosArquivoSelecionado);
+		
 		
 	}
 	

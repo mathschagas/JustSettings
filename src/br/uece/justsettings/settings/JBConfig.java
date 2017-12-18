@@ -1,14 +1,19 @@
 package br.uece.justsettings.settings;
 
+import java.io.File;
 import java.util.ArrayList;
+
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 
 public abstract class JBConfig {
 
 	protected ArrayList<ParametroConfig> parametros = new ArrayList<>();
 	protected String nome;
 	protected String alvo;
-	protected String nomeArquivoAlvo;
 	protected String tipoConfig;
+	protected File arquivoAlvo;
 	
 	protected void adicionarParametro(String nome, String tipo, Boolean usoObrigatorio) {
 		parametros.add(new ParametroConfig(nome, tipo, usoObrigatorio));
@@ -39,11 +44,7 @@ public abstract class JBConfig {
 	}
 
 	public String getNomeArquivoAlvo() {
-		return nomeArquivoAlvo;
-	}
-
-	public void setNomeArquivoAlvo(String nomeArquivoAlvo) {
-		this.nomeArquivoAlvo = nomeArquivoAlvo;
+		return getArquivoAlvo().getName();
 	}
 
 	public String getTipoConfig() {
@@ -54,6 +55,17 @@ public abstract class JBConfig {
 		this.tipoConfig = tipoConfig;
 	}
 
+	public File getArquivoAlvo() {
+		return arquivoAlvo;
+	}
+
+	public void setArquivoAlvo(File arquivoAlvo) {
+		this.arquivoAlvo = arquivoAlvo;
+	}
+
+	public abstract AnnotationExpr gerarAnnotation();
+
+	public abstract void gerarImports(CompilationUnit cUnit);
 
 
 }

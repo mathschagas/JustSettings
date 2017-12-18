@@ -1,10 +1,16 @@
 package br.uece.justsettings.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import br.uece.justsettings.settings.ParametroConfig;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TextField;
 
@@ -13,6 +19,8 @@ public class EditingCell extends TableCell<ParametroConfig, String> {
 
 	private TextField textField;
 	private ComboBox<String> comboBox;
+	private MenuButton menu;
+	ArrayList<String> menuSelectedItems = new ArrayList<String>();
 
 	public EditingCell() {
 	}
@@ -27,6 +35,10 @@ public class EditingCell extends TableCell<ParametroConfig, String> {
 				setText(null);
 				setGraphic(textField);
 				textField.selectAll();
+			} else if (tipoAtual == "KindView") {
+				createMenu();
+				setText(null);
+				setGraphic(menu);
 			} else {
 				createComboBox();
 				setText(null);
@@ -57,14 +69,20 @@ public class EditingCell extends TableCell<ParametroConfig, String> {
 					}
 					setText(null);
 					setGraphic(textField);
-					
+
+				} else if (tipoAtual == "KindView") {
+					if (menu != null) {
+						menu.setText(menuSelectedItems.toString());
+					}
+					setText(menuSelectedItems.toString());
+					setGraphic(menu);
 				} else {
 					if (comboBox != null) {
 						comboBox.setValue(getString());
 					}
 					setText(getString());
 					setGraphic(comboBox);
-				
+
 				}
 			} else {
 				setText(getString());
@@ -144,7 +162,53 @@ public class EditingCell extends TableCell<ParametroConfig, String> {
 		});
 	}
 
-	
+	private void createMenu() {
+		List<CheckMenuItem> items;
+		String tipoAtual = EditingCell.this.getTableView().getItems().get(this.getIndex()).getTipo();
+		switch (tipoAtual) {
+		case "KindView":
+			items = Arrays.asList(
+					new CheckMenuItem("KindView.ALL"),
+					new CheckMenuItem("KindView.INSERT"),
+					new CheckMenuItem("KindView.DETAIL"),
+					new CheckMenuItem("KindView.EDIT"),
+					new CheckMenuItem("KindView.FIND")
+					);
+			break;
+		default:
+			items = Arrays.asList(
+					new CheckMenuItem("Opção 1"),
+					new CheckMenuItem("Opção 2")
+					);
+			break;
+		}
+		menu = new MenuButton("");
+
+		for (final CheckMenuItem item : items) {
+			item.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
+				if (newValue) {
+					menuSelectedItems.add(item.getText());
+					menu.setText(menuSelectedItems.toString());
+					EditingCell.this.getTableView().getItems().get(this.getIndex()).setValor(menu.getText());
+				} else {
+					menuSelectedItems.remove(item.getText());
+					menu.setText(menuSelectedItems.toString());
+					EditingCell.this.getTableView().getItems().get(this.getIndex()).setValor(menu.getText());
+				}
+			});
+		}
+
+		menu.getItems().addAll(items);
+		menu.setText(getString());
+		menu.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
+		menu.setOnAction((e) -> {
+			commitEdit(menu.getItems().toString());
+			EditingCell.this.getTableView().getItems().get(this.getIndex()).setValor(menu.getText());
+		});
+
+	}
+
+
 	private String getString() {
 		return getItem() == null ? "" : getItem().toString();
 	}

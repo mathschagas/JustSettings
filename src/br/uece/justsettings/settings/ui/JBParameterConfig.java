@@ -7,29 +7,29 @@ import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 
 import br.uece.justsettings.settings.JBConfig;
-import br.uece.justsettings.settings.ParametroConfig;
 
-public class JBEntityConfig  extends JBConfig {
+public class JBParameterConfig extends JBConfig {
 	
-	public JBEntityConfig() {
-		adicionarParametro("label", "String", true);
-		adicionarParametro("collectionLabel", "String", true);
-		adicionarParametro("icon", "String", true, "ic_launcher");
+	public JBParameterConfig() {
+		adicionarParametro("name", "String", false);
+		adicionarParametro("order", "Integer", false);
 	}
 
 	@Override
 	public AnnotationExpr gerarAnnotation() {
 		NormalAnnotationExpr nae = new NormalAnnotationExpr();
-		nae.setName(this.getNome());
-		for (ParametroConfig param : this.getParametros()) {
-			nae.addPair(param.getNome(), param.getValor().toString());
-		}
+		nae.setName(getNome());
+		// Name
+		nae.addPair(getParametros().get(0).getNome(), "\""+getParametros().get(0).getValor().toString()+"\"");
+		// Order
+		nae.addPair(getParametros().get(1).getNome(), getParametros().get(1).getValor().toString());
+
 		return nae;
 	}
 
 	@Override
 	public void gerarImports(CompilationUnit cUnit) {
-		cUnit.addImport(new ImportDeclaration(new Name("org.jb.annotation.domain.JBEntity"), false, false));
+		cUnit.addImport(new ImportDeclaration(new Name("org.jb.annotation.domain.JBParameter"), false, false));
 	}
 
 }

@@ -25,8 +25,10 @@ public class ConfigButtonCell extends TableCell<Record, Boolean> {
 				JBConfig configAtual = (JBConfig) ConfigButtonCell.this.getTableView().getItems().get(ConfigButtonCell.this.getIndex());
 				//remove selected item from the table list
 				data.remove(configAtual);
-
 				configs.remove(configAtual);
+				
+				// TODO Remover JBParameters quando remover um JBAction
+				
 				data.clear();
 				data.setAll(FXCollections.observableArrayList(configs));
 			}

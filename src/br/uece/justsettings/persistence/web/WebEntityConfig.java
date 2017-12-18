@@ -1,6 +1,10 @@
 package br.uece.justsettings.persistence.web;
 
 import java.util.ArrayList;
+
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+
 import br.uece.justsettings.settings.JBConfig;
 
 public class WebEntityConfig extends JBConfig {
@@ -24,39 +28,18 @@ public class WebEntityConfig extends JBConfig {
 			adicionarParametro(grupoParametros.get(i)+"_"+"queryParameters", "String", true);
 		}
 
+	}
+
+	@Override
+	public AnnotationExpr gerarAnnotation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void gerarImports(CompilationUnit cUnit) {
+		// TODO Auto-generated method stub
 		
-//		// INSERT
-//		adicionarParametro("insert_path", "String", true);
-//		adicionarParametro("insert_method", "HttpMethod", true);
-//		adicionarParametro("insert_consumeType", "ContentType", true);
-//		
-//		// UPDATE 
-//		adicionarParametro("update_path", "String", true);
-//		adicionarParametro("update_method", "HttpMethod", true);
-//		adicionarParametro("update_consumeType", "ContentType", true);
-//		
-//		// DELETE
-//		adicionarParametro("delete_path", "String", true);
-//		adicionarParametro("delete_method", "HttpMethod", true);
-//		adicionarParametro("delete_pathParameters", "String", true);
-//		
-//		// FIND
-//		adicionarParametro("find_path", "String", true);
-//		adicionarParametro("find_method", "HttpMethod", true);
-//		adicionarParametro("find_produceType", "ContentType", true);
-//		adicionarParametro("find_queryParameters", "String", true);
-//		
-//		// FIND BY ID
-//		adicionarParametro("findById_path", "String", true);
-//		adicionarParametro("findById_method", "HttpMethod", true);
-//		adicionarParametro("findById_produceType", "ContentType", true);
-//		adicionarParametro("findById_pathParameters", "String", true);
-//		
-//		// FIND ALL
-//		adicionarParametro("findAll_path", "String", true);
-//		adicionarParametro("findAll_method", "HttpMethod", true);
-//		adicionarParametro("findAll_produceType", "ContentType", true);
-	
 	}
 	
 }

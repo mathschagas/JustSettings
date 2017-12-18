@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import javax.swing.JFileChooser;
 import com.github.javaparser.JavaParser;
@@ -17,6 +18,7 @@ import br.uece.justsettings.util.AtributosEMetodosVisitor;
 import br.uece.justsettings.util.ConfigButtonCell;
 import br.uece.justsettings.util.ConfigFactory;
 import br.uece.justsettings.util.EditingCell;
+import br.uece.justsettings.util.GeradorConfiguracoes;
 import br.uece.justsettings.util.Sessao;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
@@ -44,7 +46,7 @@ public class ConfigurarClassesController extends GeralController {
 	private static Stage stage;
 	private ArrayList<File> arquivosClassesDeNegocio = new ArrayList<File>();
 	private ArrayList<JBConfig> configs = new ArrayList<JBConfig>();
-	
+
 	@FXML
 	private ComboBox<String> arquivosComboBox;
 	@FXML
@@ -64,7 +66,7 @@ public class ConfigurarClassesController extends GeralController {
 	@FXML
 	private Button gerarBtn;
 
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -90,7 +92,7 @@ public class ConfigurarClassesController extends GeralController {
 		super.initialize(location, resources);
 
 		preencherTipoConfiguracaoComboBox();
-		
+
 		Sessao sessao = Sessao.getInstance();
 		if (sessao.obterDadosSessao().containsKey("ARQUIVOS_CLASSES_NEGOCIO")) {
 			preencherArquivosComboBox();
@@ -112,7 +114,7 @@ public class ConfigurarClassesController extends GeralController {
 				atualizarOpcoesConfiguracaoComboBox();
 			}
 		});
-		
+
 		atributosMetodosComboBox.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -133,22 +135,22 @@ public class ConfigurarClassesController extends GeralController {
 				atualizarTabelaEntradas();
 			}
 		});
-		
+
 		adicionarBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				adicionarConfiguracao();
 			}
 		});
-		
+
 		gerarBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				gerarConfiguracoes();
 			}
 		});
-		
-		
+
+
 	}
 
 	protected void voltarParaImportacaoArquivos() {
@@ -191,6 +193,7 @@ public class ConfigurarClassesController extends GeralController {
 		Sessao.getInstance().obterDadosSessao().remove("ENUMS_ARQUIVO_SELECIONADO");
 		Sessao.getInstance().obterDadosSessao().remove("ATRIBUTOS_ARQUIVO_SELECIONADO");
 		Sessao.getInstance().obterDadosSessao().remove("METODOS_ARQUIVO_SELECIONADO");
+		Sessao.getInstance().obterDadosSessao().remove("PARAMETROS_METODOS_ARQUIVO_SELECIONADO");
 
 		// Visita os possíveis alvos de configuração
 		try {
@@ -200,11 +203,11 @@ public class ConfigurarClassesController extends GeralController {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		
-		
+
+
 		// Armazena possíveis alvos de configuração encontrados na sessão
 		ArrayList<String> atributosMetodosArquivoSelecionado = new ArrayList<String>();
-		
+
 		if(Sessao.getInstance().obterDadosSessao().containsKey("CLASSES_ARQUIVO_SELECIONADO")) {
 			ArrayList<String> classesArquivoSelecionado = (ArrayList<String>) Sessao.getInstance().obterDadosSessao().get("CLASSES_ARQUIVO_SELECIONADO");
 			for (int i = 0; i < classesArquivoSelecionado.size(); i++) {
@@ -218,28 +221,46 @@ public class ConfigurarClassesController extends GeralController {
 				atributosMetodosArquivoSelecionado.add(enumsArquivoSelecionado.get(i));
 			}
 		}
-		
+
 		if (Sessao.getInstance().obterDadosSessao().containsKey("ATRIBUTOS_ARQUIVO_SELECIONADO")) {
 			ArrayList<String> atributosArquivoSelecionado = (ArrayList<String>) Sessao.getInstance().obterDadosSessao().get("ATRIBUTOS_ARQUIVO_SELECIONADO");
 			for (int i = 0; i < atributosArquivoSelecionado.size(); i++) {
 				atributosMetodosArquivoSelecionado.add(atributosArquivoSelecionado.get(i));
 			}
 		}
-	
+
 		if(Sessao.getInstance().obterDadosSessao().containsKey("METODOS_ARQUIVO_SELECIONADO")) {
 			ArrayList<String> metodosArquivoSelecionado = (ArrayList<String>) Sessao.getInstance().obterDadosSessao().get("METODOS_ARQUIVO_SELECIONADO");
 			for (int i = 0; i < metodosArquivoSelecionado.size(); i++) {
 				atributosMetodosArquivoSelecionado.add(metodosArquivoSelecionado.get(i));
 			}
 		}
-		
+
+		// Adiciona parametros de métodos mapeados com JBAction
+		if(Sessao.getInstance().obterDadosSessao().containsKey("PARAMETROS_METODOS_ARQUIVO_SELECIONADO")) {
+			HashMap<String, ArrayList<String>> parametrosMetodosArquivoSelecionado = (HashMap<String, ArrayList<String>>) Sessao.getInstance().obterDadosSessao().get("PARAMETROS_METODOS_ARQUIVO_SELECIONADO");
+			for (int i = 0; i < configs.size(); i++) {
+				if (configs.get(i).getNome().equals("JBAction")) {
+					String alvoConfigAtual = configs.get(i).getAlvo();
+					if (parametrosMetodosArquivoSelecionado.containsKey(alvoConfigAtual)) {
+						for (int j = 0; j < parametrosMetodosArquivoSelecionado.get(alvoConfigAtual).size(); j++) {
+							String parametroAtual = parametrosMetodosArquivoSelecionado.get(alvoConfigAtual).get(j);
+							atributosMetodosArquivoSelecionado.add(parametroAtual);
+						}
+					}
+				}	
+			}
+		}
+
+
+
 		// Alimenta combobox com os itens encontrados
 		atributosMetodosComboBox.getItems().addAll(FXCollections.observableArrayList(atributosMetodosArquivoSelecionado));
 
 	}
 
 	private void atualizarOpcoesConfiguracaoComboBox() {
-		
+
 		// Caso esteja faltando a seleção de algum campo 
 		if(tipoConfiguracaoComboBox.getSelectionModel().getSelectedIndex() == -1 ||
 				arquivosComboBox.getSelectionModel().getSelectedIndex() == -1 ||
@@ -256,7 +277,7 @@ public class ConfigurarClassesController extends GeralController {
 			String tipoConfiguracaoSelecionada = tipoConfiguracaoComboBox.getSelectionModel().getSelectedItem();
 			String tipoAlvoSelecionado = atributosMetodosComboBox.getSelectionModel().getSelectedItem();
 			String selecaoOpcoes = "";
-			
+
 			// Concatena itens selecionados
 			if (tipoAlvoSelecionado.endsWith("(CLASS)")) {
 				selecaoOpcoes = tipoConfiguracaoSelecionada+"/CLASS";
@@ -264,8 +285,10 @@ public class ConfigurarClassesController extends GeralController {
 				selecaoOpcoes = tipoConfiguracaoSelecionada+"/FIELD";
 			} else if ((tipoAlvoSelecionado.endsWith("(METHOD)"))) {
 				selecaoOpcoes = tipoConfiguracaoSelecionada+"/METHOD";
+			} else { // PARAMETROS DE METODOS MAPEADO COM JBACTION
+				selecaoOpcoes = tipoConfiguracaoSelecionada+"/PARAMETER";
 			}
-			
+
 			// Adiciona opcoes de configuracao de acordo com as entradas concatenadas
 			switch (selecaoOpcoes) {
 			case "INTERFACE/CLASS":
@@ -277,18 +300,21 @@ public class ConfigurarClassesController extends GeralController {
 			case "INTERFACE/METHOD":
 				opcoesConfiguracaoComboBox.getItems().addAll(FXCollections.observableArrayList("JBDescription", "JBAction"));
 				break;
+			case "INTERFACE/PARAMETER":
+				opcoesConfiguracaoComboBox.getItems().addAll(FXCollections.observableArrayList("JBParameter"));
+				break;
 			case "PERSISTENCIA/CLASS":
-				
+
 				/* Comentado, pois ainda não temos suporte para configurações em XML para persistencia em SQLite local. */
-//				opcoesConfiguracaoComboBox.getItems().addAll(FXCollections.observableArrayList("Table", "Entity"));
+				//				opcoesConfiguracaoComboBox.getItems().addAll(FXCollections.observableArrayList("Table", "Entity"));
 				opcoesConfiguracaoComboBox.getItems().addAll(FXCollections.observableArrayList("WebEntity"));
 				break;
 			case "PERSISTENCIA/FIELD":
 
 				/* Comentado, pois ainda não temos suporte para configurações em XML para persistencia em SQLite local. */
-//				opcoesConfiguracaoComboBox.getItems().addAll(FXCollections.observableArrayList("Column", "Enumerated",
-//						"Id", "JoinColumn", "JoinTable", "Lob", "ManyToMany", "ManyToOne", "OneToMany", "OneToOne",
-//						"Temporal", "Transient", "WebAggregation", "WebComposition"));
+				//				opcoesConfiguracaoComboBox.getItems().addAll(FXCollections.observableArrayList("Column", "Enumerated",
+				//						"Id", "JoinColumn", "JoinTable", "Lob", "ManyToMany", "ManyToOne", "OneToMany", "OneToOne",
+				//						"Temporal", "Transient", "WebAggregation", "WebComposition"));
 				opcoesConfiguracaoComboBox.getItems().addAll(FXCollections.observableArrayList("WebAggregation", "WebComposition"));
 				break;
 			case "PERSISTENCIA/METHOD":
@@ -312,19 +338,19 @@ public class ConfigurarClassesController extends GeralController {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void atualizarTabelaEntradas() {
-		
+
 		entradasConfigTable.setEditable(true);
 		entradasConfigTable.getColumns().clear();
-		
+
 		Callback<TableColumn<ParametroConfig, String>, TableCell<ParametroConfig, String>> cellFactory
 		= (TableColumn<ParametroConfig, String> param) -> new EditingCell();
 
 		TableColumn<ParametroConfig, String> nomeParametroColumn = new TableColumn("Parametro");
 		nomeParametroColumn.setCellValueFactory(new PropertyValueFactory<ParametroConfig, String>("nome"));
-		
+
 		TableColumn<ParametroConfig, String> tipoParametroColumn = new TableColumn("Tipo");
 		tipoParametroColumn.setCellValueFactory(new PropertyValueFactory<ParametroConfig, String>("tipo"));
-		
+
 		TableColumn<ParametroConfig, String> valorParametroColumn = new TableColumn("Conteúdo");
 		valorParametroColumn.setMinWidth(100);
 		valorParametroColumn.setCellValueFactory(new PropertyValueFactory<ParametroConfig, String>("valor"));
@@ -343,29 +369,39 @@ public class ConfigurarClassesController extends GeralController {
 	}
 
 	protected void adicionarConfiguracao() {
-		
+
 		Boolean validado = validarEntradas();
 		if (validado) {
-		
+
 			ConfigFactory fabricaConfig = ConfigFactory.getInstance();
 			String nomeConfigEscolhida = opcoesConfiguracaoComboBox.getSelectionModel().getSelectedItem();
 			JBConfig configEscolhida = fabricaConfig.getConfig(nomeConfigEscolhida);
 			configEscolhida.setNome(nomeConfigEscolhida);
-			configEscolhida.setNomeArquivoAlvo(arquivosComboBox.getSelectionModel().getSelectedItem());
+			
+			// Percorre a lista de arquivos para colocar na config o arquivo alvo selecionado.
+			for (File arquivoAlvo : arquivosClassesDeNegocio) {
+				if (arquivosComboBox.getSelectionModel().getSelectedItem().equals(arquivoAlvo.getName())) {
+					configEscolhida.setArquivoAlvo(arquivoAlvo);
+					break;
+				}
+			}
+			
 			configEscolhida.setAlvo(atributosMetodosComboBox.getSelectionModel().getSelectedItem());
 			configEscolhida.setTipoConfig(tipoConfiguracaoComboBox.getSelectionModel().getSelectedItem());
-			
+
 			ObservableList<ParametroConfig> entradasConfig = entradasConfigTable.getItems();
 			for (int i = 0; i < entradasConfig.size(); i++) {
 				configEscolhida.getParametros().get(i).setValor(entradasConfig.get(i).getValor());
 			}
-			
+
 			configs.add(configEscolhida);
 			atualizarTabelaProgresso();
+			atualizarOpcoesConfiguracaoComboBox();
 			atributosMetodosComboBox.getSelectionModel().select("");
 			opcoesConfiguracaoComboBox.getSelectionModel().select("");
+
 		} else {
-			
+			// TODO
 		}
 	}
 
@@ -376,10 +412,10 @@ public class ConfigurarClassesController extends GeralController {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void atualizarTabelaProgresso() {
-		
+
 		progressoConfigTable.setEditable(true);
 		progressoConfigTable.getColumns().clear();
-		
+
 		ObservableList<JBConfig> data = FXCollections.observableArrayList(configs);
 		TableColumn<JBConfig, String> nomeConfigColumn = new TableColumn<JBConfig, String>("Configuração");
 		nomeConfigColumn.setCellValueFactory(new PropertyValueFactory<JBConfig, String>("nome"));
@@ -418,12 +454,12 @@ public class ConfigurarClassesController extends GeralController {
 				});
 
 		progressoConfigTable.setItems(data);
-		
+
 	}
 
 	protected void gerarConfiguracoes() {
 		// TODO Auto-generated method stub
-		
+
 		JFileChooser fc = new JFileChooser("C:\\Users\\math_\\Documents\\workspace\\JustBusiness\\AndroidStudio\\JBEmptyProject\\app\\src\\main\\java\\org\\jb\\model");
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		fc.setDialogTitle("Escolher Destino das Configurações");
@@ -431,6 +467,10 @@ public class ConfigurarClassesController extends GeralController {
 		int opcao = fc.showOpenDialog(fc);
 		if (opcao == JFileChooser.APPROVE_OPTION) {
 			File destino = fc.getSelectedFile();
+			
+			GeradorConfiguracoes gc = new GeradorConfiguracoes(configs, destino);
+			gc.gerar();
+			
 			// TODO: gerar XML/Annotations
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Encerrando Aplicação");
@@ -440,7 +480,7 @@ public class ConfigurarClassesController extends GeralController {
 
 		}
 
-		
+
 	}
 
 

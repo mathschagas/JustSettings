@@ -20,6 +20,7 @@ import br.uece.justsettings.settings.ui.JBDescriptionConfig;
 import br.uece.justsettings.settings.ui.JBEntityConfig;
 import br.uece.justsettings.settings.ui.JBEnumerationConfig;
 import br.uece.justsettings.settings.ui.JBLargeConfig;
+import br.uece.justsettings.settings.ui.JBParameterConfig;
 import br.uece.justsettings.settings.ui.JBTemporalConfig;
 
 public class ConfigFactory {
@@ -63,6 +64,9 @@ public class ConfigFactory {
     		break;
     	case "JBAction":
     		retorno = new JBActionConfig();
+    		break;
+    	case "JBParameter":
+    		retorno = new JBParameterConfig();
     		break;
     		
     		
@@ -137,6 +141,9 @@ public class ConfigFactory {
     		break;
     	case "JBAction":
     		retorno = new JBActionConfig().getParametros();
+    		break;
+    	case "JBParameter":
+    		retorno = new JBParameterConfig().getParametros();
     		break;
     		
     		

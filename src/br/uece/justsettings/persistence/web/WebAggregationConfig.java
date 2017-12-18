@@ -2,6 +2,10 @@ package br.uece.justsettings.persistence.web;
 
 import java.util.ArrayList;
 
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+
 import br.uece.justsettings.settings.JBConfig;
 
 public class WebAggregationConfig extends JBConfig {
@@ -22,26 +26,17 @@ public class WebAggregationConfig extends JBConfig {
 			adicionarParametro(grupoParametros.get(i)+"_"+"queryParameters", "String", true);
 		}
 
-		
-//		// INSERT
-//		adicionarParametro("insert_path", "String", true);
-//		adicionarParametro("insert_method", "HttpMethod", true);
-//		adicionarParametro("insert_produceType", "ContentType", true);
-//		adicionarParametro("insert_queryParameters", "String", true);
-//		
-//		// DELETE
-//		adicionarParametro("delete_path", "String", true);
-//		adicionarParametro("delete_method", "HttpMethod", true);
-//		adicionarParametro("delete_produceType", "ContentType", true);
-//		adicionarParametro("delete_queryParameters", "String", true);
-//		
-//		
-//		// LIST
-//		adicionarParametro("list_path", "String", true);
-//		adicionarParametro("list_method", "HttpMethod", true);
-//		adicionarParametro("list_produceType", "ContentType", true);
-//		adicionarParametro("list_queryParameters", "String", true);
-//		
+	}
+
+	@Override
+	public AnnotationExpr gerarAnnotation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void gerarImports(CompilationUnit cUnit) {
+		// TODO Auto-generated method stub
 	}
 
 }
