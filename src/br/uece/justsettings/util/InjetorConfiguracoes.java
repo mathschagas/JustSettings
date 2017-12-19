@@ -1,4 +1,4 @@
-package br.uece.justsettings.testes;
+package br.uece.justsettings.util;
 
 import java.util.ArrayList;
 
@@ -8,6 +8,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 
 import br.uece.justsettings.settings.JBConfig;
 

@@ -3,6 +3,8 @@ package br.uece.justsettings.settings.stream;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
+import com.github.javaparser.ast.expr.Name;
 
 import br.uece.justsettings.settings.JBConfig;
 
@@ -14,14 +16,14 @@ public class StreamTransientConfig extends JBConfig {
 
 	@Override
 	public AnnotationExpr gerarAnnotation() {
-		// TODO Auto-generated method stub
-		return null;
+		MarkerAnnotationExpr mae = new MarkerAnnotationExpr();
+		mae.setName("StreamTransient");
+		return mae;
 	}
 
 	@Override
 	public void gerarImports(CompilationUnit cUnit) {
-		// TODO Auto-generated method stub
-		
+		cUnit.addImport(new ImportDeclaration(new Name("org.jb.stream.annotation.StreamTransient"), false, false));
 	}
 
 }

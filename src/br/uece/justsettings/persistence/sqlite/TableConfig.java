@@ -1,7 +1,6 @@
 package br.uece.justsettings.persistence.sqlite;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
 import br.uece.justsettings.settings.JBConfig;

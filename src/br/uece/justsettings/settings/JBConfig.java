@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
 public abstract class JBConfig {

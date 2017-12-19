@@ -281,6 +281,8 @@ public class ConfigurarClassesController extends GeralController {
 			// Concatena itens selecionados
 			if (tipoAlvoSelecionado.endsWith("(CLASS)")) {
 				selecaoOpcoes = tipoConfiguracaoSelecionada+"/CLASS";
+			} else if (tipoAlvoSelecionado.endsWith("(ENUM)")) {
+				selecaoOpcoes = tipoConfiguracaoSelecionada+"/ENUM";
 			} else if ((tipoAlvoSelecionado.endsWith("(FIELD)"))) {
 				selecaoOpcoes = tipoConfiguracaoSelecionada+"/FIELD";
 			} else if ((tipoAlvoSelecionado.endsWith("(METHOD)"))) {
@@ -292,7 +294,7 @@ public class ConfigurarClassesController extends GeralController {
 			// Adiciona opcoes de configuracao de acordo com as entradas concatenadas
 			switch (selecaoOpcoes) {
 			case "INTERFACE/CLASS":
-				opcoesConfiguracaoComboBox.getItems().addAll(FXCollections.observableArrayList("JBEntity", "JBEnumeration"));
+				opcoesConfiguracaoComboBox.getItems().addAll(FXCollections.observableArrayList("JBEntity"));
 				break;
 			case "INTERFACE/FIELD":
 				opcoesConfiguracaoComboBox.getItems().addAll(FXCollections.observableArrayList("JBAttribute", "JBLarge", "JBTemporal"));
@@ -303,14 +305,17 @@ public class ConfigurarClassesController extends GeralController {
 			case "INTERFACE/PARAMETER":
 				opcoesConfiguracaoComboBox.getItems().addAll(FXCollections.observableArrayList("JBParameter"));
 				break;
+			case "INTERFACE/ENUM":
+				opcoesConfiguracaoComboBox.getItems().addAll(FXCollections.observableArrayList("JBEnumeration"));
+				break;
+				
+				
 			case "PERSISTENCIA/CLASS":
-
 				/* Comentado, pois ainda não temos suporte para configurações em XML para persistencia em SQLite local. */
 				//				opcoesConfiguracaoComboBox.getItems().addAll(FXCollections.observableArrayList("Table", "Entity"));
 				opcoesConfiguracaoComboBox.getItems().addAll(FXCollections.observableArrayList("WebEntity"));
 				break;
 			case "PERSISTENCIA/FIELD":
-
 				/* Comentado, pois ainda não temos suporte para configurações em XML para persistencia em SQLite local. */
 				//				opcoesConfiguracaoComboBox.getItems().addAll(FXCollections.observableArrayList("Column", "Enumerated",
 				//						"Id", "JoinColumn", "JoinTable", "Lob", "ManyToMany", "ManyToOne", "OneToMany", "OneToOne",
@@ -320,12 +325,13 @@ public class ConfigurarClassesController extends GeralController {
 			case "PERSISTENCIA/METHOD":
 				opcoesConfiguracaoComboBox.getItems().addAll(FXCollections.observableArrayList("WebAction"));
 				break;
+			
 			case "STREAM/CLASS":
 				opcoesConfiguracaoComboBox.getItems().addAll(FXCollections.observableArrayList("StreamEntity"));
 				break;
 			case "STREAM/FIELD":
 				opcoesConfiguracaoComboBox.getItems().addAll(FXCollections.observableArrayList("StreamAttribute",
-						"StremElement", "StreamEnumerated", "StreamTemporal", "StreamTransient"));
+						"StreamElement", "StreamEnumerated", "StreamTemporal", "StreamTransient"));
 				break;
 			case "STREAM/METHOD":
 				opcoesConfiguracaoComboBox.getItems().addAll(FXCollections.observableArrayList());
@@ -458,8 +464,6 @@ public class ConfigurarClassesController extends GeralController {
 	}
 
 	protected void gerarConfiguracoes() {
-		// TODO Auto-generated method stub
-
 		JFileChooser fc = new JFileChooser("C:\\Users\\math_\\Documents\\workspace\\JustBusiness\\AndroidStudio\\JBEmptyProject\\app\\src\\main\\java\\org\\jb\\model");
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		fc.setDialogTitle("Escolher Destino das Configurações");
@@ -471,7 +475,6 @@ public class ConfigurarClassesController extends GeralController {
 			GeradorConfiguracoes gc = new GeradorConfiguracoes(configs, destino);
 			gc.gerar();
 			
-			// TODO: gerar XML/Annotations
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Encerrando Aplicação");
 			alert.setContentText("Arquivos gerados com sucesso e armazenados em \""+destino.getAbsolutePath()+"\" . O programa será encerrado.");
