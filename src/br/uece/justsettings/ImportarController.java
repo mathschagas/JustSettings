@@ -127,7 +127,7 @@ public class ImportarController extends GeralController {
 
 	private void adicionarClassesDeNegocio() {
 
-		JFileChooser fc = new JFileChooser("C:\\Users\\math_\\Documents\\workspace\\JustBusiness\\AndroidStudio\\JBEmptyProject\\app\\src\\main\\java\\org\\jb\\model");
+		JFileChooser fc = new JFileChooser();
 		fc.setMultiSelectionEnabled(true);
 		fc.setAcceptAllFileFilterUsed(false);
 		FileFilter filter = new FileNameExtensionFilter("Arquivos JAVA", "java");

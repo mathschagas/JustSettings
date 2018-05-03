@@ -1,5 +1,7 @@
 package br.uece.justsettings.settings.ui;
 
+import org.jdom2.Element;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -23,6 +25,12 @@ public class JBLargeConfig extends JBConfig {
 	@Override
 	public void gerarImports(CompilationUnit cUnit) {
 		cUnit.addImport(new ImportDeclaration(new Name("org.jb.annotation.visual.JBLarge"), false, false));
+	}
+
+	@Override
+	public Element gerarXML() {
+		Element jbLarge = new Element("jb-large");
+		return jbLarge;
 	}
 
 }

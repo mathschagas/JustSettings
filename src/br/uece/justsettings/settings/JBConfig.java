@@ -3,6 +3,8 @@ package br.uece.justsettings.settings;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.jdom2.Element;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
@@ -66,5 +68,6 @@ public abstract class JBConfig {
 
 	public abstract void gerarImports(CompilationUnit cUnit);
 
+	public abstract Element gerarXML();
 
 }

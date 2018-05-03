@@ -1,5 +1,7 @@
 package br.uece.justsettings.settings.stream;
 
+import org.jdom2.Element;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -26,6 +28,12 @@ public class StreamEnumeratedConfig extends JBConfig {
 	public void gerarImports(CompilationUnit cUnit) {
 		cUnit.addImport(new ImportDeclaration(new Name("org.jb.stream.annotation.StreamEnumerated"), false, false));
 		cUnit.addImport(new ImportDeclaration(new Name("org.jb.stream.annotation.enums.EnumType"), false, false));
+	}
+
+	@Override
+	public Element gerarXML() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

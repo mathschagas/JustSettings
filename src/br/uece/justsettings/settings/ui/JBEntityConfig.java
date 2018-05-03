@@ -1,5 +1,7 @@
 package br.uece.justsettings.settings.ui;
 
+import org.jdom2.Element;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -30,6 +32,15 @@ public class JBEntityConfig  extends JBConfig {
 	@Override
 	public void gerarImports(CompilationUnit cUnit) {
 		cUnit.addImport(new ImportDeclaration(new Name("org.jb.annotation.domain.JBEntity"), false, false));
+	}
+
+	@Override
+	public Element gerarXML() {
+		Element jbEntity = new Element("jb-entity");
+		jbEntity.setAttribute("label",getParametros().get(0).getValor().toString());
+		jbEntity.setAttribute("collectionLabel",getParametros().get(1).getValor().toString());
+		jbEntity.setAttribute("icon",getParametros().get(2).getValor().toString());
+		return jbEntity;
 	}
 
 }

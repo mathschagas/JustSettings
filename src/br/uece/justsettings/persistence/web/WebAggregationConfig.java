@@ -2,6 +2,8 @@ package br.uece.justsettings.persistence.web;
 
 import java.util.ArrayList;
 
+import org.jdom2.Element;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -126,6 +128,12 @@ public class WebAggregationConfig extends JBConfig {
 		cUnit.addImport(new ImportDeclaration(new Name("org.jb.persistence.web.annotation.enums.HttpMethod"), false, false));
 		cUnit.addImport(new ImportDeclaration(new Name("org.jb.persistence.web.annotation.PathParam"), false, false));
 		cUnit.addImport(new ImportDeclaration(new Name("org.jb.persistence.web.annotation.QueryParam"), false, false));
+	}
+
+	@Override
+	public Element gerarXML() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

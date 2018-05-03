@@ -9,6 +9,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 public class XMLVisitor extends VoidVisitorAdapter<Element> {
@@ -73,6 +74,25 @@ public class XMLVisitor extends VoidVisitorAdapter<Element> {
 			Attribute enclosingType = new Attribute("enclosing-type", nomeTipo);
 			method.setAttribute(type);
 			method.setAttribute(enclosingType);
+		}
+		
+		for (Parameter parametroAtual : md.getParameters()) {
+			Element parameter = new Element("parameter");
+			parameter.setAttribute("name", parametroAtual.getNameAsString());
+			if(parametroAtual.getType().toString().contains("<")) {
+				String nomeTipo = parametroAtual.getType().toString();
+				Attribute type = new Attribute("type", nomeTipo.substring(0, nomeTipo.indexOf("<")));
+				Attribute enclosingType = new Attribute("enclosing-type", nomeTipo.substring(nomeTipo.indexOf("<")+1, nomeTipo.indexOf(">")));
+				parameter.setAttribute(type);
+				parameter.setAttribute(enclosingType);
+			} else {
+				String nomeTipo = parametroAtual.getType().toString();
+				Attribute type = new Attribute("type", nomeTipo);
+				Attribute enclosingType = new Attribute("enclosing-type", nomeTipo);
+				parameter.setAttribute(type);
+				parameter.setAttribute(enclosingType);
+			}
+			method.addContent(parameter);
 		}
 		
 		List<Element> classesXML = element.getChildren();

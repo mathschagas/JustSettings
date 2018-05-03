@@ -1,5 +1,7 @@
 package br.uece.justsettings.persistence.sqlite;
 
+import org.jdom2.Element;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
@@ -21,5 +23,11 @@ public class ManyToOneConfig extends JBConfig {
 	public void gerarImports(CompilationUnit cUnit) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Element gerarXML() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
